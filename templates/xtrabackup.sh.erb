@@ -9,6 +9,7 @@ MYSQL_USER='<%= @mysql_user %>'
 MYSQL_PASS='<%= @mysql_pass %>'
 USE_INNOBACKUPX='<%= @use_innobackupx %>'
 PRUNE_BACKUPS='<%= @prune_backups %>'
+COMPRESS_BACKUPS='<%= @compress_backups %>'
 XTRABACKUP_OPTIONS='<%= @xtrabackup_options %>'
 INNOBACKUPX_OPTIONS='<%= @innobackupx_otions %>'
 LOGFILE='<%= @logfile %>'
@@ -72,6 +73,11 @@ run_prune_backups() {
   check_status
 }
 
+run_compress_backups() {
+  log "INFO: Compressing backups"
+  time innobackupex --stream=tar ${INNOBACKUP_LOCATION} | bzcat -zc > ${BACKUP_LOCATION}/$(date +%Y%m%d-%H%M%S).tar.bz2 && rm -r ${INNOBACKUP_LOCATION}
+  check_status
+}
 
 ## ================================================
 ## MAIN
@@ -86,4 +92,8 @@ fi
 
 if [ ${PRUNE_BACKUPS} == true ]; then
   run_prune_backups
+fi
+
+if [ ${COMPRESS_BACKUPS} == true ]; then
+  run_compress_backups
 fi
