@@ -158,6 +158,7 @@ class xtrabackup (
   $package_version = 'latest',
   $install_xtrabackup_bin = true,
   $prune_backups = true,
+  $compress_backups = true,
   $backup_retention = '7',
   $backup_dir = '', # Required
   $use_innobackupx = false,
